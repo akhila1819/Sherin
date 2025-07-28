@@ -1,0 +1,48 @@
+name: Build Sherin APK
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y python3-pip zip unzip openjdk-17-jdk
+        pip3 install --upgrade pip
+        pip3 install buildozer cython
+
+    - name: Build Sherin APK
+      run: |
+        pip3 install --upgrade buildozer
+        buildozer android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: Sherin-APK
+        path: bin/*.apk
+
+
+
+
+
+
+
+
+
+
+
+
